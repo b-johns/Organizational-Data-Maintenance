@@ -1,20 +1,15 @@
+# -*- coding: utf8 -*-
 # this is a general tool for manipulating one or more csv files to match the
-# structure of another csv file
-
+# structure of another csv frozen file
 
 # import packages
-
 import os
 import csv
 import re
 
 # set working directory for reading in and writing out files
-
-path_dir = "C:\Users\johnsonbriand01\Desktop"
-#path_dir = "/Users/brianjohnson/Desktop"
-
-
-
+#path_dir = "C:\Users\johnsonbriand01\Desktop"
+path_dir = "/Users/brianjohnson/Desktop"
 
 
 ###########################################################################
@@ -49,7 +44,6 @@ print "\n"
 
 
 
-
 ### establish which csv files are available in the given directory
 
 all_files = os.listdir(path_dir)
@@ -71,7 +65,6 @@ print "\n"
 
 
 
-
 ### select the csv file whose structure should be replicated
 
 print "-----------------------------------------------"
@@ -81,9 +74,7 @@ reference = csv_files[int(ref_choice)]
 
 
 
-
 ### select the csv files whose structures should be changed to replicate the reference file
-
 # allow people to pick whether to enter a list or range of indices
 print "--------------------"
 edit_choices_types = ['list', 'range']
@@ -103,6 +94,11 @@ for i in edit_choices_l:
         edits.append(csv_files[i])
 
 
+
+
+###########################################################################
+########################## CREATION OF CLASSES ############################
+###########################################################################
 
 
 ### create a class for courses_taken csv files
@@ -130,7 +126,6 @@ class froCourses_taken():      # make each of the csv files a class with headers
         self.unmatched_headers = []
 
 
-
     def setRegEx(self):
 
             # regular expressions based on reference headers
@@ -141,28 +136,27 @@ class froCourses_taken():      # make each of the csv files a class with headers
             reg_exps['Enrolled Course Subject'] = re.compile('^Discipline$|^Enrolled Course Subject$|^Subject$')
             reg_exps['Enrolled Course Name'] = re.compile('^STC.CRS.NAME$|^Enrolled Course Name$')
             reg_exps['Enrolled Course Section Number'] = re.compile('^Section$|^Enrolled Course Section Number$')
-            reg_exps['Enrolled Course Full Name (J10)'] = re.compile('^Section\s*Name$|^Enrolled Course Full Name \(J10\)$')
+            reg_exps['Enrolled Course Full Name (J10)'] = re.compile('^Section.Name$|^Section\s*Name$|^Enrolled Course Full Name \(J10\)$')
             reg_exps['Enrollment Course Title'] = re.compile('^Title$|^Enrollment Course Title$')
-            reg_exps['Section Credit Value (J10)'] = re.compile('^Reg\s*Cred$|^Section Credit Value \(J10\)$')
-            reg_exps['Completed Credits For Course (J10)'] = re.compile('^Cmpl\s*Cred$|^Completed Credits For Course\(J10\)$|^Completed Credits For Course \(J10\)$')
-            reg_exps['Enrolled Verified Grade (J10)'] = re.compile('^Vrfd\s*Grade$|^Enrolled Verified Grade\(J10\)$|^Enrolled Verified Grade \(J10\)$')
-            reg_exps['Billing Cred (J10)'] = re.compile('^BILL\s*CRED$|^Billing Cred \(J10\)$')
+            reg_exps['Section Credit Value (J10)'] = re.compile('^Reg.Cred$|^Reg\s*Cred$|^Section Credit Value \(J10\)$')
+            reg_exps['Completed Credits For Course (J10)'] = re.compile('^Cmpl.Cred$|^Cmpl\s*Cred$|^Completed Credits For Course\(J10\)$|^Completed Credits For Course \(J10\)$')
+            reg_exps['Enrolled Verified Grade (J10)'] = re.compile('^Vrfd.Grades$|^Vrfd\s*Grade$|^Enrolled Verified Grade\(J10\)$|^Enrolled Verified Grade \(J10\)$')
+            reg_exps['Billing Cred (J10)'] = re.compile('^BILL.CRED$|^BILL\s*CRED$|^Billing Cred \(J10\)$')
             reg_exps['Enrolled Course Location'] = re.compile('^Location$|^Enrolled Course Location$')
-            reg_exps['Enrollment Current Status'] = re.compile('^Current\s*Status$|^Enrollment Current Status$')
+            reg_exps['Enrollment Current Status'] = re.compile('^Current.Status$|^Current\s*Status$|^Enrollment Current Status$')
             reg_exps['Enrollment Current Status Date'] = re.compile('^Current\s*Status\s*Date$|^Enrollment Current Status Date$')
             reg_exps['Scs Mid Term Grade1 (J10)'] = re.compile('^Midterm Grade 1$|^Scs Mid Term Grade1 \(J10\)$|^Scs Mid Term Grade1  \(J10\)$')
             reg_exps['Scs Mid Term Grade2 (J10)'] = re.compile('^Midterm Grade 2$|^Scs Mid Term Grade2 \(J10\)$|^Scs Mid Term Grade2  \(J10\)$')
             reg_exps['Scs Mid Term Grade3 (J10)'] = re.compile('^Midterm Grade 3$|^Scs Mid Term Grade3 \(J10\)$|^Scs Mid Term Grade3  \(J10\)$')
             reg_exps['Scs Mid Term Grade4 (J10)'] = re.compile('^Midterm Grade 4$|^Scs Mid Term Grade4 \(J10\)$|^Scs Mid Term Grade4  \(J10\)$')
-            reg_exps['Enrolled Course Academic Level'] = re.compile('^Acad Level$|^Enrolled Course Academic Level$')
-            reg_exps['Enrolled Course Credit Type'] = re.compile('^Cred Type$|^Enrolled Course Credit Type$')
-            reg_exps['Enrollment Term Start Date'] = re.compile('^Enrollment Term Start Date$')
-            reg_exps['Enrollment Start Date'] = re.compile('^Start Date$|^Enrollment Start Date$')
+            reg_exps['Enrolled Course Academic Level'] = re.compile('^Acad.Level$|^Acad Level$|^Enrolled Course Academic Level$')
+            reg_exps['Enrolled Course Credit Type'] = re.compile('^Cred.Type$|^Cred Type$|^Enrolled Course Credit Type$')
+            reg_exps['Enrollment Term Start Date'] = re.compile('^Enrollment.Term.Start.Date$|^Enrollment Term Start Date$')
+            reg_exps['Enrollment Start Date'] = re.compile('^Start.Date$|^Start Date$|^Enrollment Start Date$')
             reg_exps['Enrollment Course Type (J10)'] = re.compile('^Course\s*Types$|^Enrollment Course Type \(J10\)$')
             reg_exps['Enrollment Registration Method (J10)'] = re.compile('^Reg Method$|^Enrollment Registration Method \(J10\)$')
 
             return reg_exps
-
 
 
     def setIndices(self, inp_head):      # method to set the new index order based on reference headers
@@ -200,20 +194,16 @@ class froCourses_taken():      # make each of the csv files a class with headers
         self.unmatched_headers = [self.headers[i] for i in range(len(self.headers)) if i not in indices_running]
 
 
-
     def getHeaders(self):   # method to retrieve initial headers for each csv object
         return self.headers
-
 
 
     def getUnmatchedHeaders(self): # method to retrieve initial headers that were unmatched to any new headers
         return self.unmatched_headers
 
 
-
     def setFileExt(self):
         return "_courses_taken.csv"
-
 
 
     def writeOut(self):  # method to write out new file
@@ -318,7 +308,6 @@ class froDemo(froCourses_taken):
 
     def setFileExt(self):
         return "_demo.csv"
-
 
 
 ### create the object class for awards_conferred csv frozen files, inheriting from courses_taken class
@@ -427,13 +416,13 @@ class froFaculty(froCourses_taken):
             for x in self.new_indices:
                 if type(x) != type(''):
                     if cnt == 6: # add first method as the assigned course instr method
-                        methods = re.findall('[^ý_Ìü]+', i[x])
+                        methods = re.findall('[^Ã½_ÃŒÃ¼]+', i[x])
                         if len(methods) > 0:
                             new_row.append(methods[0])
                         else:
                             new_row.append('')
                     elif cnt == 7: # add second method, if there is one, as the meeting course instr method
-                        methods = re.findall('[^ý_Ìü]+', i[x])
+                        methods = re.findall('[^Ã½_ÃŒÃ¼]+', i[x])
                         if len(methods) > 1:
                             new_row.append(methods[1])
                         elif len(methods) == 1:
@@ -441,19 +430,19 @@ class froFaculty(froCourses_taken):
                         else:
                             new_row.append('')
                     elif cnt == 12: # concatenate meeting days together
-                        days = re.findall('[^ý_Ìü]+', i[x])
+                        days = re.findall('[^Ã½_ÃŒÃ¼]+', i[x])
                         if len(days) > 0:
                             new_row.append(''.join(days))
                         else:
                             new_row.append('')
                     elif cnt == 13:
-                        times = re.findall('[^ý_Ìü]+', i[x])
+                        times = re.findall('[^Ã½_ÃŒÃ¼]+', i[x])
                         if len(times) > 0:
                             new_row.append(''.join(times))
                         else:
                             new_row.append('')
                     elif cnt == 18:
-                        pos_classes = re.findall('[^ý_Ìü]+', i[x])
+                        pos_classes = re.findall('[^Ã½_ÃŒÃ¼]+', i[x])
                         if len(pos_classes) > 0:
                             new_row.append(pos_classes[0])
                         else:
@@ -480,14 +469,11 @@ class froFaculty(froCourses_taken):
         print self.nrow == new_nrow
 
 
-    
-
 
 
 ###########################################################################
 ############################# FILE MANIPULATION ###########################
 ###########################################################################
-
 
 
 ### establish the reference header list; print out the list
@@ -508,8 +494,6 @@ for i in ref_head:
 print "\n"
 
 
-
-
 ### create the csv file objects using class type that corresponds to frozen file type selected earlier
 if category == 'courses_taken':
     csv_objects = [froCourses_taken(i) for i in edits]
@@ -519,8 +503,6 @@ elif category == 'awards_conferred':
     csv_objects = [froAwards(i) for i in edits]
 elif category == 'faculty_section':
     csv_objects = [froFaculty(i) for i in edits]
-
-
 
 
 ### establish the list and counts of headers to be mapped to reference headers; print out list and counts
@@ -542,8 +524,6 @@ for i in header_tallies_s:
     print i, header_tallies[i]
 
 
-
-
 ### use regex to find the corresponding to-be-edited indices in the reference header list
 print "\n"
 print "----------------"
@@ -554,15 +534,11 @@ for x in csv_objects:
     print "\n"
 
 
-
-
 ### write out the new csv files with the newly reordered headers and a check for matching dimensions
 print "----------------------------------------"
 print "Writing Out Files with Dimensions Check"
 for i in csv_objects:
     i.writeOut()
-
-
 
 
 ### assess the old headers that were never matched to any new headers; print out the list
