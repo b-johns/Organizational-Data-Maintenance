@@ -1,9 +1,8 @@
 # Organizational-Data-Maintenance
-This repository includes Python code used in updating, fixing, and maintaining historical data files for an educational institution.
+This repository includes Python code used in updating, fixing, and maintaining historical data files for an educational institution. Over time, the institution had saved hundreds of transactional database snapshots as flat files in order to retain pictures of data at specific moments before new changes overwrote old records. But because variable names and variables included in the flat files changed significantly over a number of years, it was impossible to quickly stitch these hundreds of files together to create time trends. This Python code enabled users to quickly update old flat files in large batches to reflect new conventions, allowing for data to be stitched together much more easily.
 
 The basic structure of the code may be of interest to anyone looking to create efficient solutions to reformatting large numbers of files to a common format. But the specific classes and methods therein are unique to the college for which the code was written, and therefore the program likely will not be useful unless one makes significant changes.
 
-Most of the useful content is included in the classes themselves. Methods include ways to rename, reorder, add, and drop fields to get files to match up with newer formats. Additional methods are included to split certain files into multiple ones, and to write out the new, reformatted files.
+Most of the useful content is included in the classes themselves, with one class for each type of flat file (e.g. courses taken, demographics, degrees awarded, faculty section data). Methods include ways to rename, reorder, add, and drop fields to get files to match up with newer formats. Additional methods are included to split certain files into multiple ones, and to write out the new, reformatted files.
 
-Some of the code near the beginning of the program is designed to take some user input about which 
-type of class should be used to reformat a set of files.
+This version of the code requires a user to point the program to a reference file, as in a file that is formatted in the way the user wants to format the rest of the selected files. One could make edits that would instead allow a user to type in field names to be included in the new versions of updated files or choose some other way of specifying what the end results should look like.
