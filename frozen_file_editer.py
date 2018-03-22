@@ -7,8 +7,7 @@ import os
 import csv
 import re
 
-# set working directory for reading in and writing out files
-#path_dir = "C:\Users\johnsonbriand01\Desktop"
+# starting directory for reading in and writing out files
 path_dir = "/Users/brianjohnson/Desktop"
 
 
@@ -17,8 +16,6 @@ path_dir = "/Users/brianjohnson/Desktop"
 ###########################################################################
 
 
-
-### select a category of frozen file for manipulation (either courses_taken or demo)
 print "\n\n"
 print "\t         ---------------------------------------------------------------------------------------------------"
 print "\t        IIIIIIIIIIIIII    IIIIIIIIII        IIIIIIIIIIIIII    IIIIIIIIII       IIIIIIII    IIIIIIIIIIIIIIII"
@@ -33,6 +30,7 @@ print "\t-----------------------------------------------------------------------
 print "\n\n"
 
 
+### select a category of frozen file for manipulation (either demographics, courses taken, awards conferred, or faculty section)
 print "-----------------------------------------------------------"
 categories = ['demo', 'courses_taken', 'awards_conferred', 'faculty_section']
 cat_choice = raw_input(
@@ -43,9 +41,7 @@ category = categories[int(cat_choice) - 1]
 print "\n"
 
 
-
-### establish which csv files are available in the given directory
-
+### establish which csv files are available in the specified starting directory
 all_files = os.listdir(path_dir)
 
 csv_files = []
@@ -64,14 +60,10 @@ for x in csv_files:
 print "\n"
 
 
-
 ### select the csv file whose structure should be replicated
-
 print "-----------------------------------------------"
 ref_choice = raw_input("Enter correspnding index of reference csv file:\n")
-
 reference = csv_files[int(ref_choice)]
-
 
 
 ### select the csv files whose structures should be changed to replicate the reference file
@@ -86,7 +78,6 @@ if edit_choices_types[int(edit_choices_type)-1] == 'list':
 elif edit_choices_types[int(edit_choices_type)-1] == 'range':
     edit_choices = raw_input("Enter desired starting and ending indices of range, separated by commas:\n")
     edit_choices_l = range(int(edit_choices.split(',')[0]), int(edit_choices.split(',')[1])+1)
-
 # turn the user inputs into the list of files to edit, making sure you don't include the file selected as the reference
 edits = []
 for i in edit_choices_l:
@@ -95,13 +86,12 @@ for i in edit_choices_l:
 
 
 
-
 ###########################################################################
 ########################## CREATION OF CLASSES ############################
 ###########################################################################
 
 
-### create a class for courses_taken csv files
+### create a class for courses_taken csv frozen files
 class froCourses_taken():      # make each of the csv files a class with headers and data
     """class for courses_taken csv files"""
 
@@ -126,6 +116,7 @@ class froCourses_taken():      # make each of the csv files a class with headers
         self.unmatched_headers = []
 
 
+    # search conditions for reordering and renaming data fields to match new reference file
     def setRegEx(self):
 
             # regular expressions based on reference headers
@@ -159,7 +150,8 @@ class froCourses_taken():      # make each of the csv files a class with headers
             return reg_exps
 
 
-    def setIndices(self, inp_head):      # method to set the new index order based on reference headers
+    # method to use the above regular expressions to set the new field index order based on reference headers
+    def setIndices(self, inp_head):
 
         # immediately set the new headers of the file to be the input headers
         self.new_headers = inp_head
@@ -208,7 +200,7 @@ class froCourses_taken():      # make each of the csv files a class with headers
 
     def writeOut(self):  # method to write out new file
 
-        # name the new file based on what has been found to be the term of the file
+        # name the new file based on what has been found to be the term of the file in the Enrollment Term variable
         term = self.data[0][self.new_indices[1]]
         file_write_name = os.path.join(path_dir, term.translate(None, '/') + self.setFileExt())
         fhand = open(file_write_name, "wb")
@@ -231,7 +223,7 @@ class froCourses_taken():      # make each of the csv files a class with headers
 
         fhand.close()
 
-        # check that dimensions match
+        # check that dimensions of new file and reference file match
         fhand = open(file_write_name)
         new_reader = csv.reader(fhand)
         new_headers = next(new_reader)
@@ -242,7 +234,6 @@ class froCourses_taken():      # make each of the csv files a class with headers
         print self.name, file_write_name.split("\\")[-1]
         print "{}\t{}".format(self.nrow, new_nrow)
         print self.nrow == new_nrow
-
 
 
 ### create the object class for demographics csv frozen files, inheriting from the courses_taken frozen file class
@@ -358,7 +349,6 @@ class froAwards(froCourses_taken):
         return "_awards.csv"
 
 
-
 ### create the object class for faculty_section frozen file objects, inheriting from courses_taken
 class froFaculty(froCourses_taken):
     "class for faculty_section frozen files"
@@ -470,20 +460,15 @@ class froFaculty(froCourses_taken):
 
 
 
-
 ###########################################################################
 ############################# FILE MANIPULATION ###########################
 ###########################################################################
 
 
 ### establish the reference header list; print out the list
-
 ref_hand = open(os.path.join(path_dir, reference))
-
 ref_read = csv.reader(ref_hand)
-
 ref_head = next(ref_read)
-
 print "\n"
 print "-----------------------"
 print "Reference Headers List"
@@ -494,7 +479,7 @@ for i in ref_head:
 print "\n"
 
 
-### create the csv file objects using class type that corresponds to frozen file type selected earlier
+### create the csv file objects using class type that corresponds to frozen file type selected earlier by user
 if category == 'courses_taken':
     csv_objects = [froCourses_taken(i) for i in edits]
 elif category == 'demo':
@@ -505,21 +490,16 @@ elif category == 'faculty_section':
     csv_objects = [froFaculty(i) for i in edits]
 
 
-### establish the list and counts of headers to be mapped to reference headers; print out list and counts
+### establish the list and counts of original files headers to be mapped to reference headers; print out list and counts
 all_headers = []
-
 for x in csv_objects:
     all_headers += x.getHeaders()
-
 header_tallies = {}
 for x in all_headers:
     header_tallies[x] = header_tallies.get(x, 0) + 1
-
 header_tallies_s = sorted(header_tallies, key = lambda x: header_tallies[x], reverse = True)
-
 print "--------------------------"
 print "To-Be-Edited Headers List"
-
 for i in header_tallies_s:
     print i, header_tallies[i]
 
@@ -545,23 +525,18 @@ for i in csv_objects:
 print "\n"
 print "-----------------------"
 print "Unmatched Header Counts"
-
 unmatched_headers = []
 for x in csv_objects:
     unmatched_headers += x.getUnmatchedHeaders()
-
 unmatched_headers_counts = {}
 for i in unmatched_headers:
     unmatched_headers_counts[i] = unmatched_headers_counts.get(i, 0) + 1
-
 unmatched_headers_counts_s = sorted(unmatched_headers_counts, key = lambda x: unmatched_headers_counts[x], reverse = True)
 for i in unmatched_headers_counts_s:
     print i, unmatched_headers_counts[i]
-
 print "\n"
 print "-----------------------"
 print "Unmatched Header Lists"
-
 for x in csv_objects:
     if len(x.getUnmatchedHeaders()) > 0:
         print x.name, x.getUnmatchedHeaders()
